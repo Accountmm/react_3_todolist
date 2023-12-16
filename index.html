@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="icon" href="./imgs/check.svg" type="image/check">
+    <link rel="stylesheet" href="./style/styl.css">
+    <title>Document</title>
+</head>
+<div id="root"></div>
+
+<body>
+    <script type="text/babel">
+        function App() {
+            const [arr, setArr] = React.useState([
+                {key:Math.random(),time:'12:20',exc:'JS'}
+            ]); 
+
+            const [text, setText] = React.useState('')
+
+            function ShowWhat(e,w,obj,i) {
+                e.preventDefault()
+                let t = w.split(' ')[0] 
+                // const checkHour = t.split('').map(el => el)
+                // if (!checkHour.includes(':')) {
+                //     t = `${t}:30`
+                // }
+                
+                let exsercise = w.split(' ')[1]
+                const newNote = {key:Math.random(),time:t,exc:exsercise}
+                              
+                if (t && exsercise) {
+                    setArr([...arr,newNote])
+                }else if (t && !exsercise) {
+                    exsercise = t
+                    const afterHour = new Date().getHours() + 1
+
+                    const WithinHours = {key:Math.random(),time:`${afterHour}:00`,exc:exsercise}
+                    setArr([...arr,WithinHours])
+                }
+                setText('')
+            }
+                
+            function delFunct(index) {
+                setArr(arr.filter((el,i) => i != index))
+            }
+            
+            return (
+                <div className="div">
+                    <div className="box">
+                        <form >
+                            <input className="input" type="text" placeholder='Type' value ={text} onChange={(e) => setText(e.target.value)}/> 
+                            <button onClick={(e) => ShowWhat(e,text)} className="btn">Submit</button>    
+                        </form>    
+
+                        <div className="box__box">
+                            {
+                                arr.map((obj, i) => (
+                                    <div  data-key={obj.key} key={obj.key} className="card">
+                                        <h3 className="card__time">{obj.time}</h3>
+                                        <p  className="card__text">{obj.exc}</p>
+                                        <img onClick={() => delFunct(i)} src="./imgs/delete.svg" alt="" className="card__img"/>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>    
+                </div>
+            )
+        
+        }
+        const add = document.getElementById('root')
+        const root = ReactDOM.createRoot(add)
+        root.render(<App/>)
+    </script>
+</body>
+
+</html>
